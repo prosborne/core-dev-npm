@@ -1,0 +1,33 @@
+// colors simantic variables
+$gray-dark:           #333;
+$gray-med:            lighten( $gray-dark, 20% );
+$gray-light:          lighten( $gray-dark, 40% );
+$bright-blue:         #2A5DB0; // google blue
+$dark-blue:           darken( $dark-blue, 20% );
+
+// colors functional variables
+$font-main:           $gray-dark;
+$font-secondary:      $gray-med;
+$font-tertiary:       $gray-light;
+$font-links:          $bright-blue;
+$font-label:          $gray-med;
+
+
+// typeface treatmetns
+$type-body:          'Quattrocento', serif;
+$type-headline:      'Oswald', sans-serif;
+
+// media query variables
+$mobile-min: 320px;
+$mobile-max: 736px;
+$mobile: $mobile-max;
+
+$tablet-min: $mobile-max + 1;
+$tablet-max: 1024px;
+$tablet: tablet-max;
+
+$desktop-min: $tablet + 1;
+$desktop: $desktop-min;
+
+// radius
+$radius: 5px;
