@@ -1,0 +1,2 @@
+# core-dev-npm | img
+Since there is a mixin that manages image extensions based on resolution, retina availability and ability to view SVG's, it might be good to include those in here as you can.  Remember, the default suffix in the sass/_variables.scss file is "@2x".

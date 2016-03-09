@@ -1,3 +1,14 @@
+// rem conversion mixin
+@function calculateRem($size) {
+  $remSize: $size / 16px;
+  @return $remSize * 1rem;
+}
+
+@mixin font-size($size) {
+  font-size: $size;
+  font-size: calculateRem($size);
+}
+
 // breakpoint mixin {
 @mixin breakpoint($point) {
   @if $point == large {
@@ -10,15 +21,6 @@
     @media (min-width: 37.5em)  { @content; }
   }
 }
-
-/* usage
-.page-wrap {
-  width: 75%;
-  @include breakpoint(large) { width: 60%; }
-  @include breakpoint(medium) { width: 80%; }
-  @include breakpoint(small) { width: 95%; }
-}
-*/
 
 // retina images
 @mixin image-2x($image, $width, $height) {
@@ -33,12 +35,20 @@
   }
 }
 
-/* usage
-div.logo {
-   background: url("logo.png") no-repeat;
-   @include image-2x("logo2x.png", 100px, 25px);
- }
- */
+// retina, png, svg background image fallback
+@mixin background-image($name, $size:false){
+    background-image: url(#{$image-path}/#{$name}.svg);
+    @if($size){
+        background-size: $size;
+    }
+    .no-svg &{
+        background-image: url(#{$image-path}/#{$name}.#{$fallback-extension});
+
+        @media only screen and (-moz-min-device-pixel-ratio: 1.5), only screen and (-o-min-device-pixel-ratio: 3/2), only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (min-device-pixel-ratio: 1.5) {
+          background-image: url(#{$image-path}/#{$name}#{$retina-suffix}.#{$fallback-extension});
+        }
+    }
+}
 
  // clearfix
  @mixin clearfix() {
@@ -51,12 +61,6 @@ div.logo {
         clear: both;
     }
 }
-
-/* usage
-.article {
-     @include clearfix();
-}
-*/
 
 // border radius
 @mixin border-radius($radius) {
@@ -96,19 +100,6 @@ div.logo {
      background-clip: padding-box;
 }
 
-/* usage
-.button {
-  @include border-radius(5px);
-}
-
-.submit-button {
-  @include border-top-radius(10px);
-  @include border-right-radius(8px);
-  @include border-bottom-radius(10px);
-  @include border-left-radius (6px);
-}
-*/
-
 // opacity
 @mixin opacity($opacity) {
   opacity: $opacity;
@@ -116,25 +107,12 @@ div.logo {
   filter: alpha(opacity=$opacity-ie); //IE8
 }
 
-/* usage
-.article-heading {
-  @include opacity(0.8);
-}
-*/
-
 // center block
 @mixin center-block {
   display: block;
   margin-left: auto;
   margin-right: auto;
 }
-
-/* usage
-.footer-wrap {
-  width: 450px;
-  @include center-block;
-}
-*/
 
 // absolute position
 @mixin abs-pos ($top: auto, $right: auto, $bottom: auto, $left: auto) {
@@ -145,24 +123,11 @@ div.logo {
   position: absolute;
 }
 
-/* usage
-.abs {
-  @include abs-pos(10px, 10px, 5px, 15px);
-}
-*/
-
-
 // font-size
 @mixin font-size($sizeValue: 12 ){
   font-size: $sizeValue + px; //fallback for old browsers
   font-size: (0.125 * $sizeValue) + rem;
 }
-
-/* usage
-body {
-  @include font-size(16);
-}
-*/
 
 // line height
 @mixin line-height($heightValue: 12 ){
@@ -170,11 +135,41 @@ body {
     line-height: (0.125 * $heightValue) + rem;
 }
 
-/* usage 
-body {
-  @include line-height (16);
+// animations and keyframes
+@mixin keyframes($animation-name) {
+    @-webkit-keyframes #{$animation-name} {
+        @content;
+    }
+    @-moz-keyframes #{$animation-name} {
+        @content;
+    }  
+    @-ms-keyframes #{$animation-name} {
+        @content;
+    }
+    @-o-keyframes #{$animation-name} {
+        @content;
+    }  
+    @keyframes #{$animation-name} {
+        @content;
+    }
 }
-*/
+
+@mixin animation($str) {
+  -webkit-animation: #{$str};
+  -moz-animation: #{$str};
+  -ms-animation: #{$str};
+  -o-animation: #{$str};
+  animation: #{$str};      
+}
+
+// transitions
+@mixin transition($args...) {
+  -webkit-transition: $args;
+  -moz-transition: $args;
+  -ms-transition: $args;
+  -o-transition: $args;
+  transition: $args;
+}
 
 // Form pseudo elements
 $pseudo-phprefix: "::-webkit-input-placeholder" "::-moz-placeholder" ":-ms-input-placeholder" "::placeholder";
